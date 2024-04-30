@@ -1,4 +1,5 @@
-import "./index.css";
+// App.jsx
+import "./index.css"; // Importing CSS styles from index.css
 import {
   closestCorners,
   DndContext,
@@ -6,12 +7,13 @@ import {
   PointerSensor,
   useSensor,
   useSensors
-} from "@dnd-kit/core";
-import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import Column from "./Column.jsx";
-import { useState } from "react";
+} from "@dnd-kit/core"; // Importing DndContext and sensor utilities from @dnd-kit/core
+import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable"; // Importing arrayMove and sortableKeyboardCoordinates utilities from @dnd-kit/sortable
+import Column from "./Column.jsx"; // Importing Column component from Column.jsx
+import { useState } from "react"; // Importing useState hook from React
 
 export default function App() {
+  // Define initial column data
   const data = [
     {
       id: "Column1",
@@ -42,16 +44,22 @@ export default function App() {
       ],
     },
   ];
+  // Define state for columns
   const [columns, setColumns] = useState(data);
 
+  // Function to find column by unique id
   const findColumn = (unique) => {
+    // If unique id is not provided, return null
     if (!unique) {
       return null;
     }
 
+    // Check if column with unique id exists in columns array
     if (columns.some((c) => c.id === unique)) {
       return columns.find((c) => c.id === unique) ?? null;
     }
+
+    // If not found, find the column by card's id
     const id = String(unique);
     const itemWithColumnId = columns.flatMap((c) => {
       const columnId = c.id;
@@ -61,6 +69,7 @@ export default function App() {
     return columns.find((c) => c.id === columnId) ?? null;
   };
 
+  // Function to handle drag over event
   const handleDragOver = (event) => {
     const { active, over, delta } = event;
     const activeId = String(active.id);
@@ -100,6 +109,7 @@ export default function App() {
     console.log(columns);
   };
 
+  // Function to handle drag end event
   const handleDragEnd = (event) => {
     const { active, over } = event;
     const activeId = String(active.id);
@@ -126,12 +136,14 @@ export default function App() {
     }
   };
 
+  // Define sensors for drag and drop
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
+  // Render the app component
   return (
     <DndContext
       sensors={sensors}
